@@ -35,7 +35,10 @@ public class Driver {
     g1.addBall(blackBall);
 
     while (true) {
-      blackBall.start();
+      if (blackBall.getMoveState() == true) {
+        blackBall.start();
+      }
+      // blackBall.start();
       g1.pause();
       // g1.pause();
       // System.out.println(blackBall.getXPosition());
@@ -46,82 +49,107 @@ public class Driver {
       double lastBXSpeed = 0;
       double lastBYSpeed = 0;
 
+      double constantSpeed = 10;
+
       if (g1.letterPressed('w') && userA.getYPosition() > 40) {
         userA.setYPosition(userA.getYPosition() - 7);
-        lastAYSpeed = -7;
+        lastAYSpeed = -constantSpeed;
       }
 
       if (g1.letterPressed('a') && userA.getXPosition() > 40) {
         userA.setXPosition(userA.getXPosition() - 7);
-        lastAXSpeed = -7;
+        lastAXSpeed = -constantSpeed;
       }
 
       if (g1.letterPressed('s') && userA.getYPosition() + userA.getSize() < g1.getArenaHeight()) {
         userA.setYPosition(userA.getYPosition() + 7);
-        lastAYSpeed = 7;
+        lastAYSpeed = constantSpeed;
       }
 
-      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < g1.getArenaWidth() / 2 ) {
+      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < g1.getArenaWidth() / 2) {
         userA.setXPosition(userA.getXPosition() + 7);
-        lastAXSpeed = 7;
+        lastAXSpeed = constantSpeed;
       }
 
       if (g1.upPressed() && userB.getYPosition() > 40) {
         userB.setYPosition(userB.getYPosition() - 7);
-        lastBYSpeed = -7;
+        lastBYSpeed = -constantSpeed;
       }
 
       if (g1.leftPressed() && (userB.getXPosition() > 550)) {
         userB.setXPosition(userB.getXPosition() - 7);
-        lastBXSpeed = -7;
+        lastBXSpeed = -constantSpeed;
       }
 
       if (g1.downPressed() && userB.getYPosition() + userB.getSize() < g1.getArenaHeight()) {
         userB.setYPosition(userB.getYPosition() + 7);
-        lastBYSpeed = 7;
+        lastBYSpeed = constantSpeed;
       }
 
       if (g1.rightPressed() && userB.getXPosition() + userB.getSize() < g1.getArenaWidth()) {
         userB.setXPosition(userB.getXPosition() + 7);
-        lastBXSpeed = 7;
+        lastBXSpeed = constantSpeed;
       }
 
       // if ((blackBall.collides(userA)) || (blackBall.collides(userB))) {
-      //   System.out.println("COLLISION");
+      // System.out.println("COLLISION");
       // }
 
       // if ((blackBall.collides(userA)) || (blackBall.collides(userB))) {
-      //   // blackBall.bounceLeftRight();
-      //   blackBall
+      // // blackBall.bounceLeftRight();
+      // blackBall
       // }
 
       if (blackBall.collides(userA)) {
-        blackBall.deflect(userA.getXPosition(), userA.getYPosition(), blackBall.getXPosition(), blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
+        blackBall.deflect(userA.getXPosition(), userA.getYPosition(), blackBall.getXPosition(),
+            blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
       }
 
       if (blackBall.collides(userB)) {
-        blackBall.deflect(userB.getXPosition(), userB.getYPosition(), blackBall.getXPosition(), blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
+        blackBall.deflect(userB.getXPosition(), userB.getYPosition(), blackBall.getXPosition(),
+            blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
       }
 
       if (g1.letterPressed('p')) {
-        System.out.println(userB.getXPosition());
+        System.out.println(userA.getXPosition());
       }
 
-      if (blackBall.getYPosition() > 460) {
+      if (g1.letterPressed('p')) {
+        System.out.println(userA.getYPosition());
+      }
+
+      if ((blackBall.getYPosition() > 460) || (blackBall.getYPosition() < 40)) {
         blackBall.bounceUpDown();
-      } 
-
-      if (blackBall.getYPosition() < 40) {
-        blackBall.bounceUpDown();
       }
 
-      if (blackBall.getXPosition() < 40) {
+      if ((blackBall.getXPosition() < 40
+          && (blackBall.getYPosition() < goal1.getYStart() || blackBall.getYPosition() > goal1.getYEnd())) ||
+          (blackBall.getXPosition() > 960
+              && (blackBall.getYPosition() < goal2.getYStart() || blackBall.getYPosition() > goal2.getYEnd()))) {
+        // Ball hits the side walls, bounce left or right
         blackBall.bounceLeftRight();
+      } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
+          && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
+        System.out.println("LEFT GOAL");
+        blackBall.leftGoalReset();
+
+      } else if ((blackBall.getXPosition() >= goal2.getXStart() + blackBall.getSize()
+          && blackBall.getYPosition() >= goal2.getYStart() && blackBall.getYPosition() <= goal2.getYEnd())) {
+        System.out.println("RIGHT GOAL");
+        blackBall.rightGoalReset();
       }
 
-      if (blackBall.getXPosition() > 960) {
-        blackBall.bounceLeftRight();
-      }
+      // if (blackBall.getYPosition() < 40) {
+      // blackBall.bounceUpDown();
+      // }
+
+      // if ((blackBall.getXPosition() < 40) || (blackBall.getXPosition() > 960)) {
+      // blackBall.bounceLeftRight();
+      // }
+
+      // if (blackBall.getXPosition() > 960) {
+      // blackBall.bounceLeftRight();
+      // }
 
     }
   }

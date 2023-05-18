@@ -178,36 +178,6 @@ public class Ball {
 		return distance < size / 2 + b.size / 2;
 	}
 
-	public void ballPause()
-	{
-		try { Thread.sleep(20); }
-		catch (Exception e) {};
-	}
-
-	private double x_startSpeed = 5;
-	private double y_startSpeed = -5;
-
-	public void start() {
-		move(x_startSpeed, y_startSpeed);
-		// ballPause();
-	}
-
-	public void bounceUpDown() {
-		y_startSpeed *= -1;
-	}
-
-	public void bounceLeftRight() {
-		x_startSpeed *= -1;
-	}
-
-	public double getXSpeed() {
-		return x_startSpeed;
-	}
-
-	public double getYSpeed() {
-		return y_startSpeed;
-	}
-
 	public void deflect(double xPosition1, double yPosition1, double xPosition2, double yPosition2, double xSpeed1, double ySpeed1, double xSpeed2, double ySpeed2) 
 	{
 		// The position and speed of each of the two balls in the x and y axis before collision.
@@ -285,6 +255,56 @@ public class Ball {
 				result[i] = vec[i] / mag;
 		}
 		return result;
+	}
+
+	private boolean moveState = true;
+
+	public void ballPause()
+	{
+		try { Thread.sleep(20); }
+		catch (Exception e) {};
+	}
+
+	private double x_startSpeed = 5;
+	private double y_startSpeed = -5;
+
+	public void start() {
+		move(x_startSpeed, y_startSpeed);
+		// ballPause();
+	}
+
+	public void bounceUpDown() {
+		y_startSpeed *= -1;
+	}
+
+	public void bounceLeftRight() {
+		x_startSpeed *= -1;
+	}
+
+	public double getXSpeed() {
+		return x_startSpeed;
+	}
+
+	public double getYSpeed() {
+		return y_startSpeed;
+	}
+
+	public boolean getMoveState() {
+		return moveState;
+	}
+
+	public void leftGoalReset() {
+		xPosition = 550;
+		yPosition = 250;
+		x_startSpeed = 0;
+		y_startSpeed = 0;
+	}
+
+	public void rightGoalReset() {
+		xPosition = 450;
+		yPosition = 250;
+		x_startSpeed = 0;
+		y_startSpeed = 0;
 	}
 
 
