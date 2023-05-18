@@ -55,9 +55,9 @@ public class Driver {
 
     while (true) {
       g1.pause();
-      // if (blackBall.getMoveState() == true) {
-      //   blackBall.start();
-      // }
+      if (blackBall.getMoveState() == true) {
+        blackBall.start();
+      }
 
       int lastPuckHit = 0;
 

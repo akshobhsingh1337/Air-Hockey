@@ -265,8 +265,8 @@ public class Ball {
 		catch (Exception e) {};
 	}
 
-	private double x_startSpeed = 5;
-	private double y_startSpeed = -5;
+	private double x_startSpeed = 0.001;
+	private double y_startSpeed = -0.001;
 
 	public void start() {
 		move(x_startSpeed, y_startSpeed);
@@ -302,6 +302,13 @@ public class Ball {
 
 	public void rightGoalReset() {
 		xPosition = 700;
+		yPosition = 400;
+		x_startSpeed = 0;
+		y_startSpeed = 0;
+	}
+
+	public void goalReset() {
+		xPosition = 750;
 		yPosition = 400;
 		x_startSpeed = 0;
 		y_startSpeed = 0;
