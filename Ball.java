@@ -186,7 +186,7 @@ public class Ball {
 		// double xSpeed1, xSpeed2, ySpeed1, ySpeed2;
 
 		// Calculate initial momentum of the vall.. We assume unit mass here.
-		double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed2);
+		double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
 		double p2InitialMomentum = Math.sqrt(xSpeed2 * xSpeed2 + ySpeed2 * ySpeed2);
 
 		// Calculate motion vectors

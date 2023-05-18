@@ -50,6 +50,7 @@ public class Driver {
       double lastBYSpeed = 0;
 
       double constantSpeed = 10;
+      int lastPuckHit = 0;
 
       if (g1.letterPressed('w') && userA.getYPosition() > 40) {
         userA.setYPosition(userA.getYPosition() - 7);
@@ -91,23 +92,16 @@ public class Driver {
         lastBXSpeed = constantSpeed;
       }
 
-      // if ((blackBall.collides(userA)) || (blackBall.collides(userB))) {
-      // System.out.println("COLLISION");
-      // }
-
-      // if ((blackBall.collides(userA)) || (blackBall.collides(userB))) {
-      // // blackBall.bounceLeftRight();
-      // blackBall
-      // }
-
       if (blackBall.collides(userA)) {
         blackBall.deflect(userA.getXPosition(), userA.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
+            lastPuckHit = 0;
       }
 
       if (blackBall.collides(userB)) {
         blackBall.deflect(userB.getXPosition(), userB.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
+            lastPuckHit = 1;
       }
 
       if (g1.letterPressed('p')) {
@@ -130,26 +124,28 @@ public class Driver {
         blackBall.bounceLeftRight();
       } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
           && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
-        System.out.println("LEFT GOAL");
-        blackBall.leftGoalReset();
+            if (lastPuckHit == 0) {
+              blackBall.rightGoalReset();
+              System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
+            } else {
+              blackBall.leftGoalReset();
+              System.out.println("GOAL FOR PLAYER 1 (LEFT)");
+            }
+        // System.out.println("LEFT GOAL");
+        // blackBall.leftGoalReset();
 
       } else if ((blackBall.getXPosition() >= goal2.getXStart() + blackBall.getSize()
           && blackBall.getYPosition() >= goal2.getYStart() && blackBall.getYPosition() <= goal2.getYEnd())) {
-        System.out.println("RIGHT GOAL");
-        blackBall.rightGoalReset();
+            if (lastPuckHit == 0) {
+              blackBall.leftGoalReset();
+              System.out.println("GOAL FOR PLAYER 1 (LEFT)");
+            } else {
+              blackBall.rightGoalReset();
+              System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
+            }
+        // System.out.println("RIGHT GOAL");
+        // blackBall.rightGoalReset();
       }
-
-      // if (blackBall.getYPosition() < 40) {
-      // blackBall.bounceUpDown();
-      // }
-
-      // if ((blackBall.getXPosition() < 40) || (blackBall.getXPosition() > 960)) {
-      // blackBall.bounceLeftRight();
-      // }
-
-      // if (blackBall.getXPosition() > 960) {
-      // blackBall.bounceLeftRight();
-      // }
 
     }
   }
