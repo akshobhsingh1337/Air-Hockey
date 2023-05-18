@@ -37,23 +37,37 @@ public class Driver {
     g1.addBall(userB);
     g1.addBall(blackBall);
 
+    Text gameText = new Text("Welcome to Air Hockey", 30, 250, 100, "WHITE", 1);
+
+    double lastAXSpeed = 0;
+    double lastAYSpeed = 0;
+
+    double lastBXSpeed = 0;
+    double lastBYSpeed = 0;
+
+    double constantSpeed = 15;
+
+    int playerOneScore = 0;
+    int playerTwoScore = 0;
+
+    Text player1 = new Text(String.valueOf(playerOneScore), 30, 200, 400, "WHITE", 1);
+    Text player2 = new Text(String.valueOf(playerTwoScore), 30, 1285, 400, "WHITE", 1);
+
     while (true) {
-      if (blackBall.getMoveState() == true) {
-        blackBall.start();
-      }
-      // blackBall.start();
       g1.pause();
+      // if (blackBall.getMoveState() == true) {
+      //   blackBall.start();
+      // }
+
+      int lastPuckHit = 0;
+
+      g1.addText(gameText);
+      g1.addText(player1);
+      g1.addText(player2);
+
+      // blackBall.start();
       // g1.pause();
       // System.out.println(blackBall.getXPosition());
-
-      double lastAXSpeed = 0;
-      double lastAYSpeed = 0;
-
-      double lastBXSpeed = 0;
-      double lastBYSpeed = 0;
-
-      double constantSpeed = 10;
-      int lastPuckHit = 0;
 
       if (g1.letterPressed('w') && userA.getYPosition() > 190) {
         userA.setYPosition(userA.getYPosition() - 7);
@@ -70,7 +84,7 @@ public class Driver {
         lastAYSpeed = constantSpeed;
       }
 
-      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < 750) {
+      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < 780) {
         userA.setXPosition(userA.getXPosition() + 7);
         lastAXSpeed = constantSpeed;
       }
@@ -98,13 +112,13 @@ public class Driver {
       if (blackBall.collides(userA)) {
         blackBall.deflect(userA.getXPosition(), userA.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
-            lastPuckHit = 0;
+        lastPuckHit = 0;
       }
 
       if (blackBall.collides(userB)) {
         blackBall.deflect(userB.getXPosition(), userB.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
-            lastPuckHit = 1;
+        lastPuckHit = 1;
       }
 
       if (g1.letterPressed('p')) {
@@ -127,27 +141,35 @@ public class Driver {
         blackBall.bounceLeftRight();
       } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
           && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
-            if (lastPuckHit == 0) {
-              blackBall.rightGoalReset();
-              System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
-            } else {
-              blackBall.leftGoalReset();
-              System.out.println("GOAL FOR PLAYER 1 (LEFT)");
-            }
-        // System.out.println("LEFT GOAL");
-        // blackBall.leftGoalReset();
+        if (lastPuckHit == 0) {
+          blackBall.rightGoalReset();
+          System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
+          gameText.setText("Player 2 Wins that round");
+          playerTwoScore += 1;
+          player2.setText(String.valueOf(playerTwoScore));
+        } else {
+          blackBall.leftGoalReset();
+          System.out.println("GOAL FOR PLAYER 1 (LEFT)");
+          gameText.setText("Player 1 Wins that round");
+          playerOneScore += 1;
+          player1.setText(String.valueOf(playerOneScore));
+        }
 
       } else if ((blackBall.getXPosition() >= goal2.getXStart() + blackBall.getSize()
           && blackBall.getYPosition() >= goal2.getYStart() && blackBall.getYPosition() <= goal2.getYEnd())) {
-            if (lastPuckHit == 0) {
-              blackBall.leftGoalReset();
-              System.out.println("GOAL FOR PLAYER 1 (LEFT)");
-            } else {
-              blackBall.rightGoalReset();
-              System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
-            }
-        // System.out.println("RIGHT GOAL");
-        // blackBall.rightGoalReset();
+        if (lastPuckHit == 0) {
+          blackBall.leftGoalReset();
+          System.out.println("GOAL FOR PLAYER 1 (LEFT)");
+          gameText.setText("Player 1 Wins that round");
+          playerOneScore += 1;
+          player1.setText(String.valueOf(playerOneScore));
+        } else {
+          blackBall.rightGoalReset();
+          System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
+          gameText.setText("Player 2 Wins that round");
+          playerTwoScore += 1;
+          player2.setText(String.valueOf(playerTwoScore));
+        }
       }
 
     }

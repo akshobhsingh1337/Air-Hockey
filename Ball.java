@@ -307,7 +307,4 @@ public class Ball {
 		y_startSpeed = 0;
 	}
 
-
-
-
 }
