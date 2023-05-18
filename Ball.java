@@ -314,4 +314,13 @@ public class Ball {
 		y_startSpeed = 0;
 	}
 
+	public void applyFriction() {
+		// Define the friction coefficient
+		double friction = 0.008;
+		// ballPause();
+
+		x_startSpeed *= (1 - friction);
+		y_startSpeed *= (1 - friction);
+}
+
 }
