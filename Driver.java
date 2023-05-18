@@ -1,34 +1,37 @@
 public class Driver {
   public static void main(String args[]) {
 
-    GameArena g1 = new GameArena(1000, 500);
+    GameArena g1 = new GameArena(1500, 800);
 
-    Rectangle r1 = new Rectangle(0, 0, 1000, 500, "BLUE", 0);
+    Rectangle r0 = new Rectangle(0, 0, 1500, 800, "BLACK", 0);
 
-    Rectangle r2 = new Rectangle(20, 20, 960, 460, "WHITE", 1);
+    Rectangle r1 = new Rectangle(250, 150, 1000, 500, "BLUE", 1);
 
+    Rectangle r2 = new Rectangle(270, 170, 960, 460, "WHITE", 2);
+
+    g1.addRectangle(r0);
     g1.addRectangle(r1);
     g1.addRectangle(r2);
 
-    Line goal1 = new Line(25, 150, 25, 350, 10, "GREY", 2);
+    Line goal1 = new Line(275, 300, 275, 500, 10, "GREY", 3);
 
-    Line goal2 = new Line(975, 150, 975, 350, 10, "GREY", 2);
+    Line goal2 = new Line(1225, 300, 1225, 500, 10, "GREY", 3);
 
-    Line center = new Line(500, 20, 500, 480, 1, "BLUE", 2);
+    Line center = new Line(750, 170, 750, 630, 1, "BLUE", 3);
 
     g1.addLine(goal1);
     g1.addLine(goal2);
     g1.addLine(center);
 
-    Ball centerA = new Ball(500, 250, 100, "BLUE", 3);
-    Ball centerB = new Ball(500, 250, 98, "WHITE", 3);
+    Ball centerA = new Ball(750, 400, 100, "BLUE", 4);
+    Ball centerB = new Ball(750, 400, 98, "WHITE", 4);
 
     g1.addBall(centerA);
     g1.addBall(centerB);
 
-    Ball userA = new Ball(150, 250, 50, "BLUE", 4);
-    Ball userB = new Ball(850, 250, 50, "BLUE", 4);
-    Ball blackBall = new Ball(500, 250, 25, "BLACK", 4);
+    Ball userA = new Ball(400, 400, 50, "BLUE", 5);
+    Ball userB = new Ball(1100, 400, 50, "BLUE", 5);
+    Ball blackBall = new Ball(750, 400, 25, "BLACK", 5);
 
     g1.addBall(userA);
     g1.addBall(userB);
@@ -52,42 +55,42 @@ public class Driver {
       double constantSpeed = 10;
       int lastPuckHit = 0;
 
-      if (g1.letterPressed('w') && userA.getYPosition() > 40) {
+      if (g1.letterPressed('w') && userA.getYPosition() > 190) {
         userA.setYPosition(userA.getYPosition() - 7);
         lastAYSpeed = -constantSpeed;
       }
 
-      if (g1.letterPressed('a') && userA.getXPosition() > 40) {
+      if (g1.letterPressed('a') && userA.getXPosition() > 290) {
         userA.setXPosition(userA.getXPosition() - 7);
         lastAXSpeed = -constantSpeed;
       }
 
-      if (g1.letterPressed('s') && userA.getYPosition() + userA.getSize() < g1.getArenaHeight()) {
+      if (g1.letterPressed('s') && userA.getYPosition() + userA.getSize() < 650) {
         userA.setYPosition(userA.getYPosition() + 7);
         lastAYSpeed = constantSpeed;
       }
 
-      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < g1.getArenaWidth() / 2) {
+      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < 750) {
         userA.setXPosition(userA.getXPosition() + 7);
         lastAXSpeed = constantSpeed;
       }
 
-      if (g1.upPressed() && userB.getYPosition() > 40) {
+      if (g1.upPressed() && userB.getYPosition() > 190) {
         userB.setYPosition(userB.getYPosition() - 7);
         lastBYSpeed = -constantSpeed;
       }
 
-      if (g1.leftPressed() && (userB.getXPosition() > 550)) {
+      if (g1.leftPressed() && (userB.getXPosition() > 800)) {
         userB.setXPosition(userB.getXPosition() - 7);
         lastBXSpeed = -constantSpeed;
       }
 
-      if (g1.downPressed() && userB.getYPosition() + userB.getSize() < g1.getArenaHeight()) {
+      if (g1.downPressed() && userB.getYPosition() + userB.getSize() < 650) {
         userB.setYPosition(userB.getYPosition() + 7);
         lastBYSpeed = constantSpeed;
       }
 
-      if (g1.rightPressed() && userB.getXPosition() + userB.getSize() < g1.getArenaWidth()) {
+      if (g1.rightPressed() && userB.getXPosition() + userB.getSize() < 1250) {
         userB.setXPosition(userB.getXPosition() + 7);
         lastBXSpeed = constantSpeed;
       }
@@ -112,13 +115,13 @@ public class Driver {
         System.out.println(userA.getYPosition());
       }
 
-      if ((blackBall.getYPosition() > 460) || (blackBall.getYPosition() < 40)) {
+      if ((blackBall.getYPosition() > 610) || (blackBall.getYPosition() < 190)) {
         blackBall.bounceUpDown();
       }
 
-      if ((blackBall.getXPosition() < 40
+      if ((blackBall.getXPosition() < 290
           && (blackBall.getYPosition() < goal1.getYStart() || blackBall.getYPosition() > goal1.getYEnd())) ||
-          (blackBall.getXPosition() > 960
+          (blackBall.getXPosition() > 1210
               && (blackBall.getYPosition() < goal2.getYStart() || blackBall.getYPosition() > goal2.getYEnd()))) {
         // Ball hits the side walls, bounce left or right
         blackBall.bounceLeftRight();

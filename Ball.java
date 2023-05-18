@@ -294,15 +294,15 @@ public class Ball {
 	}
 
 	public void leftGoalReset() {
-		xPosition = 550;
-		yPosition = 250;
+		xPosition = 800;
+		yPosition = 400;
 		x_startSpeed = 0;
 		y_startSpeed = 0;
 	}
 
 	public void rightGoalReset() {
-		xPosition = 450;
-		yPosition = 250;
+		xPosition = 700;
+		yPosition = 400;
 		x_startSpeed = 0;
 		y_startSpeed = 0;
 	}
