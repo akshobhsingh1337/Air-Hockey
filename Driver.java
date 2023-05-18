@@ -1,4 +1,9 @@
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+
 public class Driver {
+
   public static void main(String args[]) {
 
     GameArena g1 = new GameArena(1500, 800);
@@ -52,6 +57,9 @@ public class Driver {
 
     Text player1 = new Text(String.valueOf(playerOneScore), 30, 200, 400, "WHITE", 1);
     Text player2 = new Text(String.valueOf(playerTwoScore), 30, 1285, 400, "WHITE", 1);
+
+    // Load bounce sound
+    Clip bounceSound = loadSound("sounds/bounce.wav");
 
     while (true) {
       g1.pause();
@@ -114,14 +122,14 @@ public class Driver {
       if (blackBall.collides(userA)) {
         blackBall.deflect(userA.getXPosition(), userA.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
-            // blackBall.applyFriction();
+        // blackBall.applyFriction();
         lastPuckHit = 0;
       }
 
       if (blackBall.collides(userB)) {
         blackBall.deflect(userB.getXPosition(), userB.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
-            // blackBall.applyFriction();
+        // blackBall.applyFriction();
         lastPuckHit = 1;
       }
 
@@ -136,6 +144,7 @@ public class Driver {
       if ((blackBall.getYPosition() > 610) || (blackBall.getYPosition() < 190)) {
         // blackBall.applyFriction();
         blackBall.bounceUpDown();
+        playSound(bounceSound);
       }
 
       if ((blackBall.getXPosition() < 290
@@ -144,6 +153,7 @@ public class Driver {
               && (blackBall.getYPosition() < goal2.getYStart() || blackBall.getYPosition() > goal2.getYEnd()))) {
         // Ball hits the side walls, bounce left or right
         blackBall.bounceLeftRight();
+        playSound(bounceSound);
         // blackBall.applyFriction();
       } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
           && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
@@ -178,6 +188,25 @@ public class Driver {
         }
       }
 
+    }
+  }
+
+  private static Clip loadSound(String soundFilePath) {
+    try {
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundFilePath));
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioInputStream);
+      return clip;
+    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private static void playSound(Clip sound) {
+    if (sound != null) {
+      sound.setFramePosition(0);
+      sound.start();
     }
   }
 }
