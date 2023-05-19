@@ -58,14 +58,19 @@ public class Driver {
     Text player1 = new Text(String.valueOf(playerOneScore), 30, 200, 400, "WHITE", 1);
     Text player2 = new Text(String.valueOf(playerTwoScore), 30, 1285, 400, "WHITE", 1);
 
+    SoundPlayer soundPlayer = new SoundPlayer();
+
     // Load bounce sound
-    Clip bounceSound = loadSound("sounds/bounce.wav");
+    // Clip bounceSound = loadSound("sounds/bounce.wav");
+
+    new Thread(() -> soundPlayer.playSound("sounds/fanfare.wav")).start();
 
     while (true) {
       g1.pause();
       if (blackBall.getMoveState() == true) {
         blackBall.start();
       }
+
 
       blackBall.applyFriction();
 
@@ -124,6 +129,7 @@ public class Driver {
             blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
         // blackBall.applyFriction();
         lastPuckHit = 0;
+        new Thread(() -> soundPlayer.playSound("sounds/hit.wav")).start();
       }
 
       if (blackBall.collides(userB)) {
@@ -131,6 +137,7 @@ public class Driver {
             blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
         // blackBall.applyFriction();
         lastPuckHit = 1;
+        new Thread(() -> soundPlayer.playSound("sounds/hit.wav")).start();
       }
 
       if (g1.letterPressed('p')) {
@@ -142,9 +149,8 @@ public class Driver {
       }
 
       if ((blackBall.getYPosition() > 610) || (blackBall.getYPosition() < 190)) {
-        // blackBall.applyFriction();
         blackBall.bounceUpDown();
-        playSound(bounceSound);
+        new Thread(() -> soundPlayer.playSound("sounds/bounce.wav")).start();
       }
 
       if ((blackBall.getXPosition() < 290
@@ -153,10 +159,10 @@ public class Driver {
               && (blackBall.getYPosition() < goal2.getYStart() || blackBall.getYPosition() > goal2.getYEnd()))) {
         // Ball hits the side walls, bounce left or right
         blackBall.bounceLeftRight();
-        playSound(bounceSound);
-        // blackBall.applyFriction();
+        new Thread(() -> soundPlayer.playSound("sounds/bounce.wav")).start();
       } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
           && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
+        new Thread(() -> soundPlayer.playSound("sounds/applause.wav")).start();
         if (lastPuckHit == 0) {
           blackBall.rightGoalReset();
           System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
@@ -173,6 +179,7 @@ public class Driver {
 
       } else if ((blackBall.getXPosition() >= goal2.getXStart() + blackBall.getSize()
           && blackBall.getYPosition() >= goal2.getYStart() && blackBall.getYPosition() <= goal2.getYEnd())) {
+        new Thread(() -> soundPlayer.playSound("sounds/applause.wav")).start();
         if (lastPuckHit == 0) {
           blackBall.leftGoalReset();
           System.out.println("GOAL FOR PLAYER 1 (LEFT)");
@@ -188,25 +195,6 @@ public class Driver {
         }
       }
 
-    }
-  }
-
-  private static Clip loadSound(String soundFilePath) {
-    try {
-      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundFilePath));
-      Clip clip = AudioSystem.getClip();
-      clip.open(audioInputStream);
-      return clip;
-    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  private static void playSound(Clip sound) {
-    if (sound != null) {
-      sound.setFramePosition(0);
-      sound.start();
     }
   }
 }
