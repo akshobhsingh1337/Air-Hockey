@@ -163,15 +163,17 @@ public class Driver {
       } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
           && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
         new Thread(() -> soundPlayer.playSound("sounds/applause.wav")).start();
+        userA.resetLeftMallet();
+        userB.resetRightMallet();
         if (lastPuckHit == 0) {
           blackBall.rightGoalReset();
-          System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
+          // System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
           gameText.setText("Player 2 Wins that round");
           playerTwoScore += 1;
           player2.setText(String.valueOf(playerTwoScore));
         } else {
           blackBall.leftGoalReset();
-          System.out.println("GOAL FOR PLAYER 1 (LEFT)");
+          // System.out.println("GOAL FOR PLAYER 1 (LEFT)");
           gameText.setText("Player 1 Wins that round");
           playerOneScore += 1;
           player1.setText(String.valueOf(playerOneScore));
@@ -180,15 +182,17 @@ public class Driver {
       } else if ((blackBall.getXPosition() >= goal2.getXStart() + blackBall.getSize()
           && blackBall.getYPosition() >= goal2.getYStart() && blackBall.getYPosition() <= goal2.getYEnd())) {
         new Thread(() -> soundPlayer.playSound("sounds/applause.wav")).start();
+        userA.resetLeftMallet();
+        userB.resetRightMallet();
         if (lastPuckHit == 0) {
           blackBall.leftGoalReset();
-          System.out.println("GOAL FOR PLAYER 1 (LEFT)");
+          // System.out.println("GOAL FOR PLAYER 1 (LEFT)");
           gameText.setText("Player 1 Wins that round");
           playerOneScore += 1;
           player1.setText(String.valueOf(playerOneScore));
         } else {
           blackBall.rightGoalReset();
-          System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
+          // System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
           gameText.setText("Player 2 Wins that round");
           playerTwoScore += 1;
           player2.setText(String.valueOf(playerTwoScore));
