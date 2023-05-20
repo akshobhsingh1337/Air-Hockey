@@ -7,7 +7,7 @@ public class Driver {
     // Ask the user for the total amount of goals required to win
     String goalsInput = JOptionPane.showInputDialog("Enter the total amount of goals required to win:");
     int totalGoalsToWin = Integer.parseInt(goalsInput);
-    
+
     boolean gameState = true;
 
     // Creating Screen and getting all objects
@@ -25,7 +25,6 @@ public class Driver {
     Text leftPlayerScore = screenObject.getLeftPlayerText();
     Text rightPlayerScore = screenObject.getRightPlayerText();
 
-
     double lastAXSpeed = 0;
     double lastAYSpeed = 0;
 
@@ -39,6 +38,7 @@ public class Driver {
 
     SoundPlayer soundPlayer = new SoundPlayer();
     Cheats cheatEngine = new Cheats();
+    KeyboardInputs keyboardHandler = new KeyboardInputs();
 
     soundPlayer.playIntro();
 
@@ -53,77 +53,24 @@ public class Driver {
       int lastPuckHit = 0;
 
       if (gameState == true) {
-        if (mainScreen.letterPressed('w') && leftMallet.getYPosition() > 190) {
-          leftMallet.setYPosition(leftMallet.getYPosition() - (constantSpeed - 5));
-          lastAYSpeed = -constantSpeed;
-        }
 
-        if (mainScreen.letterPressed('a') && leftMallet.getXPosition() > 290) {
-          leftMallet.setXPosition(leftMallet.getXPosition() - (constantSpeed - 5));
-          lastAXSpeed = -constantSpeed;
-        }
+        // Handles all Left Mallet Keyboard Inputs
+        double[] updatedSpeedsLeftMallet = keyboardHandler.handleLeftMalletInput(mainScreen,
+            leftMallet, constantSpeed);
+        lastAYSpeed = updatedSpeedsLeftMallet[0];
+        lastAXSpeed = updatedSpeedsLeftMallet[1];
 
-        // 50 is size of mallet (diameter)
-        if (mainScreen.letterPressed('s') && leftMallet.getYPosition() + 50 < 650) {
-          leftMallet.setYPosition(leftMallet.getYPosition() + (constantSpeed - 5));
-          lastAYSpeed = constantSpeed;
-        }
+        // Handles all Right Mallet Keyboard Inputs
+        double[] updatedSpeedRightMallet = keyboardHandler.handleRightMalletInput(mainScreen, rightMallet,
+            constantSpeed);
+        lastBYSpeed = updatedSpeedRightMallet[0];
+        lastBXSpeed = updatedSpeedRightMallet[1];
 
-        if (mainScreen.letterPressed('d') && leftMallet.getXPosition() + 50 < 800) {
-          leftMallet.setXPosition(leftMallet.getXPosition() + (constantSpeed - 5));
-          lastAXSpeed = constantSpeed;
-        }
+        // Handles Music On/Off Input
+        keyboardHandler.HandleMusicInput(mainScreen, soundPlayer, musicBox);
 
-        if (mainScreen.upPressed() && rightMallet.getYPosition() > 190) {
-          rightMallet.setYPosition(rightMallet.getYPosition() - (constantSpeed - 5));
-          lastBYSpeed = -constantSpeed;
-        }
-
-        if (mainScreen.leftPressed() && (rightMallet.getXPosition() > 750)) {
-          rightMallet.setXPosition(rightMallet.getXPosition() - (constantSpeed - 5));
-          lastBXSpeed = -constantSpeed;
-        }
-
-        if (mainScreen.downPressed() && rightMallet.getYPosition() + 50 < 650) {
-          rightMallet.setYPosition(rightMallet.getYPosition() + (constantSpeed - 5));
-          lastBYSpeed = constantSpeed;
-        }
-
-        if (mainScreen.rightPressed() && rightMallet.getXPosition() + 50 < 1250) {
-          rightMallet.setXPosition(rightMallet.getXPosition() + (constantSpeed - 5));
-          lastBXSpeed = constantSpeed;
-        }
-
-        if (mainScreen.letterPressed('m')) {
-          mainScreen.pause();
-          if (soundPlayer.getSoundState()) {
-            musicBox.setColour("RED");
-            soundPlayer.setSoundState(false);
-          } else {
-            musicBox.setColour("GREEN");
-            soundPlayer.setSoundState(true);
-          }
-        }
-
-        if ((mainScreen.shiftPressed()) && (mainScreen.letterPressed('i'))) {
-          cheatEngine.giantMallet(leftMallet, rightMallet);
-        }
-
-        if ((mainScreen.shiftPressed()) && (mainScreen.letterPressed('o'))) {
-          constantSpeed = 30;
-        }
-
-        if ((mainScreen.shiftPressed()) && (mainScreen.letterPressed('p'))) {
-          cheatEngine.changeTableColor(table);
-        }
-
-        if ((mainScreen.shiftPressed()) && (mainScreen.letterPressed('r'))) {
-          cheatEngine.resetGiantMallet(leftMallet, rightMallet);
-
-          constantSpeed = 15;
-
-          cheatEngine.resetTableColor(table);
-        }
+        // Handles all Cheats Keyboard Inputs
+        constantSpeed = keyboardHandler.handleCheatInputs(mainScreen, cheatEngine, leftMallet, rightMallet, table, constantSpeed);
       }
 
       if (puck.collides(leftMallet)) {
