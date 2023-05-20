@@ -13,9 +13,7 @@ public class Driver {
     GameArena g1 = new GameArena(1500, 800);
 
     Rectangle r0 = new Rectangle(0, 0, 1500, 800, "BLACK", 0);
-
     Rectangle r1 = new Rectangle(250, 150, 1000, 500, "BLUE", 1);
-
     Rectangle r2 = new Rectangle(270, 170, 960, 460, "WHITE", 2);
 
     g1.addRectangle(r0);
@@ -23,9 +21,7 @@ public class Driver {
     g1.addRectangle(r2);
 
     Line goal1 = new Line(275, 300, 275, 500, 10, "GREY", 3);
-
     Line goal2 = new Line(1225, 300, 1225, 500, 10, "GREY", 3);
-
     Line center = new Line(750, 170, 750, 630, 1, "BLUE", 3);
 
     g1.addLine(goal1);
@@ -46,6 +42,12 @@ public class Driver {
     g1.addBall(userB);
     g1.addBall(blackBall);
 
+    Rectangle musicBox = new Rectangle(1300, 600, 172, 30, "GREEN", 1);
+    Text musicText = new Text("Sound Effects", 25, 1303, 622, "BLACK", 3);
+
+    g1.addRectangle(musicBox);
+    g1.addText(musicText);
+
     Text gameText = new Text("Welcome to Air Hockey", 30, 250, 100, "WHITE", 1);
 
     double lastAXSpeed = 0;
@@ -64,10 +66,7 @@ public class Driver {
 
     SoundPlayer soundPlayer = new SoundPlayer();
 
-    // Load bounce sound
-    // Clip bounceSound = loadSound("sounds/bounce.wav");
-
-    new Thread(() -> soundPlayer.playSound("sounds/fanfare.wav")).start();
+    soundPlayer.playIntro();
 
     while (true) {
       g1.pause();
@@ -82,10 +81,6 @@ public class Driver {
       g1.addText(gameText);
       g1.addText(player1);
       g1.addText(player2);
-
-      // blackBall.start();
-      // g1.pause();
-      // System.out.println(blackBall.getXPosition());
 
       if (gameState == true) {
         if (g1.letterPressed('w') && userA.getYPosition() > 190) {
@@ -127,22 +122,32 @@ public class Driver {
           userB.setXPosition(userB.getXPosition() + 10);
           lastBXSpeed = constantSpeed;
         }
+
+        if (g1.letterPressed('m')) {
+          g1.pause();
+          if (soundPlayer.getSoundState()) {
+            musicBox.setColour("RED");
+            soundPlayer.setSoundState(false);
+          } else {
+            musicBox.setColour("GREEN");
+            soundPlayer.setSoundState(true);
+          }
+          System.out.println(soundPlayer.getSoundState());
+        }
       }
 
       if (blackBall.collides(userA)) {
         blackBall.deflect(userA.getXPosition(), userA.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastAXSpeed, lastAYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
-        // blackBall.applyFriction();
         lastPuckHit = 0;
-        new Thread(() -> soundPlayer.playSound("sounds/hit.wav")).start();
+        soundPlayer.playHit();
       }
 
       if (blackBall.collides(userB)) {
         blackBall.deflect(userB.getXPosition(), userB.getYPosition(), blackBall.getXPosition(),
             blackBall.getYPosition(), lastBXSpeed, lastBYSpeed, blackBall.getXSpeed(), blackBall.getYSpeed());
-        // blackBall.applyFriction();
         lastPuckHit = 1;
-        new Thread(() -> soundPlayer.playSound("sounds/hit.wav")).start();
+        soundPlayer.playHit();
       }
 
       if (g1.letterPressed('p')) {
@@ -155,7 +160,7 @@ public class Driver {
 
       if ((blackBall.getYPosition() > 610) || (blackBall.getYPosition() < 190)) {
         blackBall.bounceUpDown();
-        new Thread(() -> soundPlayer.playSound("sounds/bounce.wav")).start();
+        soundPlayer.playBounce();
       }
 
       if ((blackBall.getXPosition() < 290
@@ -167,7 +172,7 @@ public class Driver {
         new Thread(() -> soundPlayer.playSound("sounds/bounce.wav")).start();
       } else if ((blackBall.getXPosition() <= goal1.getXEnd() - blackBall.getSize()
           && blackBall.getYPosition() >= goal1.getYStart() && blackBall.getYPosition() <= goal1.getYEnd())) {
-        new Thread(() -> soundPlayer.playSound("sounds/applause.wav")).start();
+        soundPlayer.playApplause();
         userA.resetLeftMallet();
         userB.resetRightMallet();
         if (lastPuckHit == 0) {
@@ -186,7 +191,7 @@ public class Driver {
 
       } else if ((blackBall.getXPosition() >= goal2.getXStart() + blackBall.getSize()
           && blackBall.getYPosition() >= goal2.getYStart() && blackBall.getYPosition() <= goal2.getYEnd())) {
-        new Thread(() -> soundPlayer.playSound("sounds/applause.wav")).start();
+        soundPlayer.playApplause();
         userA.resetLeftMallet();
         userB.resetRightMallet();
         if (lastPuckHit == 0) {
@@ -206,6 +211,9 @@ public class Driver {
 
       if (playerOneScore == totalGoalsToWin) {
         gameText.setText("Player 1 Wins the game, Press SPACE to start another game or ESC to exit");
+        soundPlayer.playDrumRoll();
+        soundPlayer.setDrumRoll(false);
+        System.out.println(soundPlayer.getDrumRoll());
         gameState = false;
 
         if (g1.escPressed()) {
@@ -227,9 +235,13 @@ public class Driver {
 
           gameState = true;
           g1.setSpacePressedFalse();
+
+          soundPlayer.setDrumRoll(true);
         }
       } else if (playerTwoScore == totalGoalsToWin) {
         gameText.setText("Player 2 Wins the game, Press SPACE to start another game or ESC to exit");
+        soundPlayer.playDrumRoll();
+        soundPlayer.setDrumRoll(false);
         gameState = false;
 
         if (g1.escPressed()) {
@@ -249,6 +261,8 @@ public class Driver {
 
           gameState = true;
           g1.setSpacePressedFalse();
+
+          soundPlayer.setDrumRoll(true);
         }
       }
 
