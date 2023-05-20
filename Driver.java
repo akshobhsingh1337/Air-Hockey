@@ -1,10 +1,14 @@
-import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.JOptionPane;
 
 public class Driver {
 
   public static void main(String args[]) {
+
+    // Ask the user for the total amount of goals required to win
+    String goalsInput = JOptionPane.showInputDialog("Enter the total amount of goals required to win:");
+    int totalGoalsToWin = Integer.parseInt(goalsInput);
+    boolean gameState = true;
+    // System.out.println(totalGoalsToWin);
 
     GameArena g1 = new GameArena(1500, 800);
 
@@ -71,7 +75,6 @@ public class Driver {
         blackBall.start();
       }
 
-
       blackBall.applyFriction();
 
       int lastPuckHit = 0;
@@ -84,44 +87,46 @@ public class Driver {
       // g1.pause();
       // System.out.println(blackBall.getXPosition());
 
-      if (g1.letterPressed('w') && userA.getYPosition() > 190) {
-        userA.setYPosition(userA.getYPosition() - 10);
-        lastAYSpeed = -constantSpeed;
-      }
+      if (gameState == true) {
+        if (g1.letterPressed('w') && userA.getYPosition() > 190) {
+          userA.setYPosition(userA.getYPosition() - 10);
+          lastAYSpeed = -constantSpeed;
+        }
 
-      if (g1.letterPressed('a') && userA.getXPosition() > 290) {
-        userA.setXPosition(userA.getXPosition() - 10);
-        lastAXSpeed = -constantSpeed;
-      }
+        if (g1.letterPressed('a') && userA.getXPosition() > 290) {
+          userA.setXPosition(userA.getXPosition() - 10);
+          lastAXSpeed = -constantSpeed;
+        }
 
-      if (g1.letterPressed('s') && userA.getYPosition() + userA.getSize() < 650) {
-        userA.setYPosition(userA.getYPosition() + 10);
-        lastAYSpeed = constantSpeed;
-      }
+        if (g1.letterPressed('s') && userA.getYPosition() + userA.getSize() < 650) {
+          userA.setYPosition(userA.getYPosition() + 10);
+          lastAYSpeed = constantSpeed;
+        }
 
-      if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < 780) {
-        userA.setXPosition(userA.getXPosition() + 10);
-        lastAXSpeed = constantSpeed;
-      }
+        if (g1.letterPressed('d') && userA.getXPosition() + userA.getSize() < 780) {
+          userA.setXPosition(userA.getXPosition() + 10);
+          lastAXSpeed = constantSpeed;
+        }
 
-      if (g1.upPressed() && userB.getYPosition() > 190) {
-        userB.setYPosition(userB.getYPosition() - 10);
-        lastBYSpeed = -constantSpeed;
-      }
+        if (g1.upPressed() && userB.getYPosition() > 190) {
+          userB.setYPosition(userB.getYPosition() - 10);
+          lastBYSpeed = -constantSpeed;
+        }
 
-      if (g1.leftPressed() && (userB.getXPosition() > 750)) {
-        userB.setXPosition(userB.getXPosition() - 10);
-        lastBXSpeed = -constantSpeed;
-      }
+        if (g1.leftPressed() && (userB.getXPosition() > 750)) {
+          userB.setXPosition(userB.getXPosition() - 10);
+          lastBXSpeed = -constantSpeed;
+        }
 
-      if (g1.downPressed() && userB.getYPosition() + userB.getSize() < 650) {
-        userB.setYPosition(userB.getYPosition() + 10);
-        lastBYSpeed = constantSpeed;
-      }
+        if (g1.downPressed() && userB.getYPosition() + userB.getSize() < 650) {
+          userB.setYPosition(userB.getYPosition() + 10);
+          lastBYSpeed = constantSpeed;
+        }
 
-      if (g1.rightPressed() && userB.getXPosition() + userB.getSize() < 1250) {
-        userB.setXPosition(userB.getXPosition() + 10);
-        lastBXSpeed = constantSpeed;
+        if (g1.rightPressed() && userB.getXPosition() + userB.getSize() < 1250) {
+          userB.setXPosition(userB.getXPosition() + 10);
+          lastBXSpeed = constantSpeed;
+        }
       }
 
       if (blackBall.collides(userA)) {
@@ -199,6 +204,55 @@ public class Driver {
         }
       }
 
+      if (playerOneScore == totalGoalsToWin) {
+        gameText.setText("Player 1 Wins the game, Press SPACE to start another game or ESC to exit");
+        gameState = false;
+
+        if (g1.escPressed()) {
+          g1.exit();
+        }
+
+        // System.out.println(g1.spacePressed());
+
+        if (g1.spacePressed()) {
+          playerOneScore = 0;
+          playerTwoScore = 0;
+          player1.setText(String.valueOf(playerOneScore));
+          player2.setText(String.valueOf(playerTwoScore));
+          gameText.setText("Welcome to Air Hockey");
+          blackBall.goalReset();
+
+          totalGoalsToWin = Integer
+              .parseInt(JOptionPane.showInputDialog("Enter the total amount of goals required to win:"));
+
+          gameState = true;
+          g1.setSpacePressedFalse();
+        }
+      } else if (playerTwoScore == totalGoalsToWin) {
+        gameText.setText("Player 2 Wins the game, Press SPACE to start another game or ESC to exit");
+        gameState = false;
+
+        if (g1.escPressed()) {
+          g1.exit();
+        }
+
+        if (g1.spacePressed()) {
+          playerOneScore = 0;
+          playerTwoScore = 0;
+          player1.setText(String.valueOf(playerOneScore));
+          player2.setText(String.valueOf(playerTwoScore));
+          gameText.setText("Welcome to Air Hockey");
+          blackBall.goalReset();
+
+          totalGoalsToWin = Integer
+              .parseInt(JOptionPane.showInputDialog("Enter the total amount of goals required to win:"));
+
+          gameState = true;
+          g1.setSpacePressedFalse();
+        }
+      }
+
     }
+
   }
 }

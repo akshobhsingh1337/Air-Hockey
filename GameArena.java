@@ -666,6 +666,11 @@ public class GameArena extends JPanel implements Runnable, KeyListener, MouseLis
 		return space;
 	}
 
+	public void setSpacePressedFalse() 
+	{
+		space = false;
+	}
+
         /**
 	 * Determines if the user is currently pressing the Esc button.
 	 * @return true if the esc button is pressed, false otherwise.
