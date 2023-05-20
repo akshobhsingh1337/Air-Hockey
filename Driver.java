@@ -25,11 +25,11 @@ public class Driver {
     Text leftPlayerScore = screenObject.getLeftPlayerText();
     Text rightPlayerScore = screenObject.getRightPlayerText();
 
-    double lastAXSpeed = 0;
-    double lastAYSpeed = 0;
+    double leftMalletXSpeed = 0;
+    double leftMalletYSpeed = 0;
 
-    double lastBXSpeed = 0;
-    double lastBYSpeed = 0;
+    double rightMalletXSpeed = 0;
+    double rightMalletYSpeed = 0;
 
     double constantSpeed = 15;
 
@@ -39,14 +39,14 @@ public class Driver {
     SoundPlayer soundPlayer = new SoundPlayer();
     Cheats cheatEngine = new Cheats();
     KeyboardInputs keyboardHandler = new KeyboardInputs();
+    // TableManager tableManager = new TableManager();
 
     soundPlayer.playIntro();
 
     while (true) {
       mainScreen.pause();
-      if (puck.getMoveState() == true) {
-        puck.start();
-      }
+
+      puck.start();
 
       puck.applyFriction();
 
@@ -54,89 +54,50 @@ public class Driver {
 
       if (gameState == true) {
 
-        // Handles all Left Mallet Keyboard Inputs
+        // Handles all Left Mallet Keyboard Inputs and updates speed
         double[] updatedSpeedsLeftMallet = keyboardHandler.handleLeftMalletInput(mainScreen,
             leftMallet, constantSpeed);
-        lastAYSpeed = updatedSpeedsLeftMallet[0];
-        lastAXSpeed = updatedSpeedsLeftMallet[1];
+        leftMalletYSpeed = updatedSpeedsLeftMallet[0];
+        leftMalletXSpeed = updatedSpeedsLeftMallet[1];
 
-        // Handles all Right Mallet Keyboard Inputs
+        // Handles all Right Mallet Keyboard Inputs and updates speed
         double[] updatedSpeedRightMallet = keyboardHandler.handleRightMalletInput(mainScreen, rightMallet,
             constantSpeed);
-        lastBYSpeed = updatedSpeedRightMallet[0];
-        lastBXSpeed = updatedSpeedRightMallet[1];
+        rightMalletYSpeed = updatedSpeedRightMallet[0];
+        rightMalletXSpeed = updatedSpeedRightMallet[1];
 
         // Handles Music On/Off Input
         keyboardHandler.HandleMusicInput(mainScreen, soundPlayer, musicBox);
 
-        // Handles all Cheats Keyboard Inputs
-        constantSpeed = keyboardHandler.handleCheatInputs(mainScreen, cheatEngine, leftMallet, rightMallet, table, constantSpeed);
+        // Handles all Cheats Keyboard Inputs and updates speed
+        constantSpeed = keyboardHandler.handleCheatInputs(mainScreen, cheatEngine, leftMallet, rightMallet, table,
+            constantSpeed);
       }
 
+      // Handles Collision between Mallets and Puck
+
+      // Collision between Left Mallet and Puck
       if (puck.collides(leftMallet)) {
         puck.deflect(leftMallet.getXPosition(), leftMallet.getYPosition(), puck.getXPosition(),
-            puck.getYPosition(), lastAXSpeed, lastAYSpeed, puck.getXSpeed(), puck.getYSpeed());
+            puck.getYPosition(), leftMalletXSpeed, leftMalletYSpeed, puck.getXSpeed(), puck.getYSpeed());
         lastPuckHit = 0;
         soundPlayer.playHit();
       }
 
+      // Collision between Right Mallet and Puck
       if (puck.collides(rightMallet)) {
         puck.deflect(rightMallet.getXPosition(), rightMallet.getYPosition(), puck.getXPosition(),
-            puck.getYPosition(), lastBXSpeed, lastBYSpeed, puck.getXSpeed(), puck.getYSpeed());
+            puck.getYPosition(), rightMalletXSpeed, rightMalletYSpeed, puck.getXSpeed(), puck.getYSpeed());
         lastPuckHit = 1;
         soundPlayer.playHit();
       }
 
-      if ((puck.getYPosition() > 610) || (puck.getYPosition() < 190)) {
-        puck.bounceUpDown();
-        soundPlayer.playBounce();
-      }
+      TableManager tableManager = new TableManager(puck, leftGoal, rightGoal, soundPlayer, leftMallet, rightMallet,
+          topText, leftPlayerScore, rightPlayerScore);
 
-      if ((puck.getXPosition() < 290
-          && (puck.getYPosition() < leftGoal.getYStart() || puck.getYPosition() > leftGoal.getYEnd())) ||
-          (puck.getXPosition() > 1210
-              && (puck.getYPosition() < rightGoal.getYStart() || puck.getYPosition() > rightGoal.getYEnd()))) {
-        // Ball hits the side walls, bounce left or right
-        puck.bounceLeftRight();
-        soundPlayer.playBounce();
-      } else if ((puck.getXPosition() <= leftGoal.getXEnd() - puck.getSize()
-          && puck.getYPosition() >= leftGoal.getYStart() && puck.getYPosition() <= leftGoal.getYEnd())) {
-        soundPlayer.playApplause();
-        leftMallet.resetLeftMallet();
-        rightMallet.resetRightMallet();
-        if (lastPuckHit == 0) {
-          puck.rightGoalReset();
-          // System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
-          topText.setText("Player 2 Wins that round");
-          playerTwoScore += 1;
-          rightPlayerScore.setText(String.valueOf(playerTwoScore));
-        } else {
-          puck.leftGoalReset();
-          // System.out.println("GOAL FOR PLAYER 1 (LEFT)");
-          topText.setText("Player 1 Wins that round");
-          playerOneScore += 1;
-          leftPlayerScore.setText(String.valueOf(playerOneScore));
-        }
-
-      } else if ((puck.getXPosition() >= rightGoal.getXStart() + puck.getSize()
-          && puck.getYPosition() >= rightGoal.getYStart() && puck.getYPosition() <= rightGoal.getYEnd())) {
-        soundPlayer.playApplause();
-        leftMallet.resetLeftMallet();
-        rightMallet.resetRightMallet();
-        if (lastPuckHit == 0) {
-          puck.leftGoalReset();
-          // System.out.println("GOAL FOR PLAYER 1 (LEFT)");
-          topText.setText("Player 1 Wins that round");
-          playerOneScore += 1;
-          leftPlayerScore.setText(String.valueOf(playerOneScore));
-        } else {
-          puck.rightGoalReset();
-          // System.out.println("GOAL FOR PLAYER 2 (RIGHT)");
-          topText.setText("Player 2 Wins that round");
-          playerTwoScore += 1;
-          rightPlayerScore.setText(String.valueOf(playerTwoScore));
-        }
-      }
+      int[] newScores = tableManager.handleTableInteractions(lastPuckHit);
+      playerOneScore = newScores[0];
+      playerTwoScore = newScores[1];
 
       if (playerOneScore == totalGoalsToWin) {
         topText.setText("Player 1 Wins the game! Press SPACE to start another game or ESC to exit");
@@ -148,8 +109,6 @@ public class Driver {
           mainScreen.exit();
           break;
         }
-
-        // System.out.println(mainScreen.spacePressed());
 
         if (mainScreen.spacePressed()) {
           playerOneScore = 0;
