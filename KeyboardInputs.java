@@ -79,7 +79,7 @@ public class KeyboardInputs {
   }
 
   /**
-   * Handles the music button (Rectangle)
+   * Handles the music button inputs (Rectangle)
    * @param mainScreen GameArena object to be used.
    * @param soundPlayer Soundplayer object to be modified
    * @param musicBox Rectangle boxs' color to be modified

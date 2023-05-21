@@ -1,7 +1,16 @@
 import javax.swing.JOptionPane;
 
+/**
+ * The main class that drives the Air Hockey game.
+ */
+
 public class Driver {
 
+  /**
+   * The main method that starts the Air Hockey game.
+   *
+   * @param args Command-line arguments (not used)
+   */
   public static void main(String args[]) {
 
     // Ask the user for the total amount of goals required to win
@@ -46,8 +55,10 @@ public class Driver {
     while (true) {
       mainScreen.pause();
 
+      // Start the puck movement
       puck.start();
 
+      // Apply friction to the puck
       puck.applyFriction();
 
       int lastPuckHit = 0;
@@ -92,13 +103,16 @@ public class Driver {
         soundPlayer.playHit();
       }
 
+      // Manage interactions with the game table, goals, mallets, and scores
       TableManager tableManager = new TableManager(puck, leftGoal, rightGoal, soundPlayer, leftMallet, rightMallet,
           topText, leftPlayerScore, rightPlayerScore);
 
+      // Handle table interactions and update scores
       int[] newScores = tableManager.handleTableInteractions(lastPuckHit);
       playerOneScore = newScores[0];
       playerTwoScore = newScores[1];
 
+      // Check if either player has reached the total goals required to win
       if (playerOneScore == totalGoalsToWin) {
         topText.setText("Player 1 Wins the game! Press SPACE to start another game or ESC to exit");
         soundPlayer.playDrumRoll();
@@ -106,25 +120,21 @@ public class Driver {
         gameState = false;
 
         if (mainScreen.escPressed()) {
+          // Exit the game if ESC key is pressed
           mainScreen.exit();
           break;
         }
 
         if (mainScreen.spacePressed()) {
-          playerOneScore = 0;
-          playerTwoScore = 0;
-          leftPlayerScore.setText(String.valueOf(playerOneScore));
-          rightPlayerScore.setText(String.valueOf(playerTwoScore));
-          topText.setText("Welcome to Air Hockey");
-          puck.goalReset();
+          // Start a new game if SPACE key is pressed
+          startNewGame(mainScreen, playerOneScore, playerTwoScore, leftPlayerScore, rightPlayerScore, topText,
+              puck, soundPlayer);
 
+          // Ask the user for the new total amount of goals required to win
           totalGoalsToWin = Integer
               .parseInt(JOptionPane.showInputDialog("Enter the total amount of goals required to win:"));
 
           gameState = true;
-          mainScreen.setSpacePressedFalse();
-
-          soundPlayer.setDrumRoll(true);
         }
       } else if (playerTwoScore == totalGoalsToWin) {
         topText.setText("Player 2 Wins the game! Press SPACE to start another game or ESC to exit");
@@ -138,24 +148,45 @@ public class Driver {
         }
 
         if (mainScreen.spacePressed()) {
-          playerOneScore = 0;
-          playerTwoScore = 0;
-          leftPlayerScore.setText(String.valueOf(playerOneScore));
-          rightPlayerScore.setText(String.valueOf(playerTwoScore));
-          topText.setText("Welcome to Air Hockey");
-          puck.goalReset();
+          // Start a new game if SPACE key is pressed
+          startNewGame(mainScreen, playerOneScore, playerTwoScore, leftPlayerScore, rightPlayerScore, topText,
+              puck, soundPlayer);
 
+          // Ask the user for the new total amount of goals required to win
           totalGoalsToWin = Integer
               .parseInt(JOptionPane.showInputDialog("Enter the total amount of goals required to win:"));
 
           gameState = true;
-          mainScreen.setSpacePressedFalse();
-
-          soundPlayer.setDrumRoll(true);
         }
       }
-
     }
+  }
 
+  /**
+   * Resets the game state for a new game.
+   *
+   * @param mainScreen       The main game arena screen.
+   * @param playerOneScore   The score of player one.
+   * @param playerTwoScore   The score of player two.
+   * @param leftPlayerScore  The text component displaying the score of player
+   *                         one.
+   * @param rightPlayerScore The text component displaying the score of player
+   *                         two.
+   * @param topText          The text component displaying the game status.
+   * @param puck             The puck object.
+   * @param soundPlayer      The sound player for game sounds.
+   */
+  private static void startNewGame(GameArena mainScreen, int playerOneScore, int playerTwoScore,
+      Text leftPlayerScore, Text rightPlayerScore, Text topText, Ball puck, SoundPlayer soundPlayer) {
+    playerOneScore = 0;
+    playerTwoScore = 0;
+    leftPlayerScore.setText(String.valueOf(playerOneScore));
+    rightPlayerScore.setText(String.valueOf(playerTwoScore));
+    topText.setText("Welcome to Air Hockey");
+    puck.goalReset();
+
+    // Reset game state and clear key press flags
+    mainScreen.setSpacePressedFalse();
+    soundPlayer.setDrumRoll(true);
   }
 }

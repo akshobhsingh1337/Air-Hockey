@@ -2,9 +2,6 @@
  * This class provides special modifications to the properties of the Air
  * Hockey game.
  * 
- * 
- * @author Akshobh Singh (38727242)
- * 
  */
 
 public class Cheats {

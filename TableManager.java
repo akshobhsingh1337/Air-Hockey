@@ -1,3 +1,6 @@
+/**
+ * This class provides all functionality for handling the tables' boundaries.
+ */
 public class TableManager {
   private Ball puck;
   private Line leftGoal;
@@ -9,6 +12,22 @@ public class TableManager {
   private Text leftPlayerScore;
   private Text rightPlayerScore;
 
+  /**
+   * Constructor for the TableManager class, creates a new TableManager object
+   * with all required elements.
+   *
+   * @param puck             Ball object representing the puck
+   * @param leftGoal         Line object representing the left goal
+   * @param rightGoal        Line object representing the right goal
+   * @param soundPlayer      SoundPlayer object for handling sound playback
+   * @param leftMallet       Ball object representing the left mallet
+   * @param rightMallet      Ball object representing the right mallet
+   * @param topText          Text object for displaying the top text
+   * @param leftPlayerScore  Text object for displaying the score of the left
+   *                         player
+   * @param rightPlayerScore Text object for displaying the score of the right
+   *                         player
+   */
   public TableManager(Ball puck, Line leftGoal, Line rightGoal, SoundPlayer soundPlayer,
       Ball leftMallet, Ball rightMallet, Text topText, Text leftPlayerScore,
       Text rightPlayerScore) {
@@ -23,6 +42,13 @@ public class TableManager {
     this.rightPlayerScore = rightPlayerScore;
   }
 
+  /**
+   * Handles the puck bouncing off the walls of the table.
+   *
+   * @param lastPuckHit Value indicating which mallet last hit the puck (0 for
+   *                    left mallet, 1 for right mallet)
+   * @return An array containing the updated scores for both players
+   */
   public int[] handleTableInteractions(int lastPuckHit) {
     if ((puck.getYPosition() > 610) || (puck.getYPosition() < 190)) {
       puck.bounceUpDown();
@@ -46,6 +72,14 @@ public class TableManager {
     return new int[] { Integer.parseInt(leftPlayerScore.getText()), Integer.parseInt(rightPlayerScore.getText()) };
   }
 
+  /**
+   * Handles the mechanism after a goal is scored, including playing sounds and
+   * resetting mallet positions.
+   *
+   * @param lastPuckHit Value indicating which mallet last hit the puck (0 for
+   *                    left mallet, 1 for right mallet)
+   * @param isLeftGoal  Flag indicating if the puck went into the left goal
+   */
   private void handleGoalScored(int lastPuckHit, boolean isLeftGoal) {
     soundPlayer.playApplause();
     leftMallet.resetLeftMallet();
@@ -60,6 +94,11 @@ public class TableManager {
     }
   }
 
+  /**
+   * Updates the score value and text based on the scoring player.
+   *
+   * @param isPlayerOne Flag indicating if the left player (playerOne) scored
+   */
   private void updateScoreAndText(boolean isPlayerOne) {
     if (isPlayerOne) {
       int playerOneScore = Integer.parseInt(leftPlayerScore.getText()) + 1;

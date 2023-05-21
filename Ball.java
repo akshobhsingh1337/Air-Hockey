@@ -14,6 +14,9 @@ public class Ball {
 	private double size; // The diameter of this Ball
 	private int layer; // The layer of this ball is on.
 	private String colour; // The colour of this Ball
+	private boolean moveState = true;
+	private double x_startSpeed = 0.001;
+	private double y_startSpeed = -0.001;
 
 	// Permissible colours are:
 	// BLACK, BLUE, CYAN, DARKGREY, GREY,
@@ -178,6 +181,19 @@ public class Ball {
 		return distance < size / 2 + b.size / 2;
 	}
 
+	/**
+	 * Calculates the deflection of two balls after a collision and updates their
+	 * trajectories.
+	 *
+	 * @param xPosition1 The x-position of the first ball.
+	 * @param yPosition1 The y-position of the first ball.
+	 * @param xPosition2 The x-position of the second ball.
+	 * @param yPosition2 The y-position of the second ball.
+	 * @param xSpeed1    The x-speed of the first ball.
+	 * @param ySpeed1    The y-speed of the first ball.
+	 * @param xSpeed2    The x-speed of the second ball.
+	 * @param ySpeed2    The y-speed of the second ball.
+	 */
 	public void deflect(double xPosition1, double yPosition1, double xPosition2, double yPosition2, double xSpeed1,
 			double ySpeed1, double xSpeed2, double ySpeed2) {
 
@@ -233,8 +249,10 @@ public class Ball {
 	 * Converts a vector into a unit vector.
 	 * Used by the deflect() method to calculate the resultant direction after a
 	 * collision.
+	 *
+	 * @param vec The vector to be normalized.
+	 * @return The normalized vector.
 	 */
-
 	private double[] normalizeVector(double[] vec) {
 		double mag = 0.0;
 		int dimensions = vec.length;
@@ -257,8 +275,9 @@ public class Ball {
 		return result;
 	}
 
-	private boolean moveState = true;
-
+	/**
+	 * Pauses the ball movement for a short duration.
+	 */
 	public void ballPause() {
 		try {
 			Thread.sleep(20);
@@ -267,33 +286,57 @@ public class Ball {
 		;
 	}
 
-	private double x_startSpeed = 0.001;
-	private double y_startSpeed = -0.001;
-
+	/**
+	 * Starts the ball movement with the initial speed.
+	 */
 	public void start() {
 		move(x_startSpeed, y_startSpeed);
 	}
 
+	/**
+	 * Changes the vertical direction of the ball's movement.
+	 */
 	public void bounceUpDown() {
 		y_startSpeed *= -1;
 	}
 
+	/**
+	 * Changes the horizontal direction of the ball's movement.
+	 */
 	public void bounceLeftRight() {
 		x_startSpeed *= -1;
 	}
 
+	/**
+	 * Returns the current x-speed of the ball.
+	 *
+	 * @return The x-speed of the ball.
+	 */
 	public double getXSpeed() {
 		return x_startSpeed;
 	}
 
+	/**
+	 * Returns the current y-speed of the ball.
+	 *
+	 * @return The y-speed of the ball.
+	 */
 	public double getYSpeed() {
 		return y_startSpeed;
 	}
 
+	/**
+	 * Returns the current movement state of the ball.
+	 *
+	 * @return True if the ball is moving, false otherwise.
+	 */
 	public boolean getMoveState() {
 		return moveState;
 	}
 
+	/**
+	 * Resets the position and speed of the ball when the left player scores a goal.
+	 */
 	public void leftGoalReset() {
 		xPosition = 800;
 		yPosition = 400;
@@ -301,6 +344,10 @@ public class Ball {
 		y_startSpeed = 0;
 	}
 
+	/**
+	 * Resets the position and speed of the ball when the right player scores a
+	 * goal.
+	 */
 	public void rightGoalReset() {
 		xPosition = 700;
 		yPosition = 400;
@@ -308,6 +355,9 @@ public class Ball {
 		y_startSpeed = 0;
 	}
 
+	/**
+	 * Resets the position and speed of the ball when a goal is scored.
+	 */
 	public void goalReset() {
 		xPosition = 750;
 		yPosition = 400;
@@ -315,6 +365,9 @@ public class Ball {
 		y_startSpeed = 0;
 	}
 
+	/**
+	 * Applies friction to the ball's movement.
+	 */
 	public void applyFriction() {
 		double friction = 0.008;
 
@@ -322,11 +375,17 @@ public class Ball {
 		y_startSpeed *= (1 - friction);
 	}
 
+	/**
+	 * Resets the position of the left mallet.
+	 */
 	public void resetLeftMallet() {
 		this.xPosition = 400;
 		this.yPosition = 400;
 	}
 
+	/**
+	 * Resets the position of the right mallet.
+	 */
 	public void resetRightMallet() {
 		this.xPosition = 1100;
 		this.yPosition = 400;

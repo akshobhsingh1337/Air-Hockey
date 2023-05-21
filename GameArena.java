@@ -666,6 +666,9 @@ public class GameArena extends JPanel implements Runnable, KeyListener, MouseLis
 		return space;
 	}
 
+	/**
+	 * Sets the spacebar variable to false.
+	 */
 	public void setSpacePressedFalse() 
 	{
 		space = false;
