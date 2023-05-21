@@ -180,11 +180,6 @@ public class Ball {
 
 	public void deflect(double xPosition1, double yPosition1, double xPosition2, double yPosition2, double xSpeed1,
 			double ySpeed1, double xSpeed2, double ySpeed2) {
-		// The position and speed of each of the two balls in the x and y axis before
-		// collision.
-		// YOU NEED TO FILL THESE VALUES IN AS APPROPRIATAE
-		// double xPosition1, xPosition2, yPosition1, yPosition2;
-		// double xSpeed1, xSpeed2, ySpeed1, ySpeed2;
 
 		// Calculate initial momentum of the vall.. We assume unit mass here.
 		double p1InitialMomentum = Math.sqrt(xSpeed1 * xSpeed1 + ySpeed1 * ySpeed1);
@@ -277,7 +272,6 @@ public class Ball {
 
 	public void start() {
 		move(x_startSpeed, y_startSpeed);
-		// ballPause();
 	}
 
 	public void bounceUpDown() {
@@ -322,9 +316,7 @@ public class Ball {
 	}
 
 	public void applyFriction() {
-		// Define the friction coefficient
 		double friction = 0.008;
-		// ballPause();
 
 		x_startSpeed *= (1 - friction);
 		y_startSpeed *= (1 - friction);

@@ -1,4 +1,21 @@
+/**
+ * This class handles all keyboard inputs for the Air Hockey game.
+ */
 public class KeyboardInputs {
+
+  /**
+   * Constructor for KeyboardInputs class, creates new KeyboardInputs object.
+   */
+  public KeyboardInputs() {
+  }
+
+  /**
+   * Handles all movements of the left mallet (ball)
+   * @param mainScreen GameArena object to be used.
+   * @param leftMallet Mallet (ball) to be handled
+   * @param constantSpeed Speed at which the mallet should move
+   * @return The last Y and X speed of the mallet respectively
+   */
   public double[] handleLeftMalletInput(GameArena mainScreen, Ball leftMallet, double constantSpeed) {
     double updatedAYSpeed = 0;
     double updatedAXSpeed = 0;
@@ -27,6 +44,13 @@ public class KeyboardInputs {
     return new double[] { updatedAYSpeed, updatedAXSpeed };
   }
 
+  /**
+   * Handles all movement of the right mallet (ball)
+   * @param mainScreen GameArena object to be used.
+   * @param rightMallet Mallet (ball) to be handled
+   * @param constantSpeed Speed at which the mallet should move
+   * @return The last Y and X speed of the mallet respectively
+   */
   public double[] handleRightMalletInput(GameArena mainScreen, Ball rightMallet, double constantSpeed) {
     double updatedBXSpeed = 0;
     double updatedBYSpeed = 0;
@@ -54,6 +78,12 @@ public class KeyboardInputs {
     return new double[] { updatedBYSpeed, updatedBXSpeed };
   }
 
+  /**
+   * Handles the music button (Rectangle)
+   * @param mainScreen GameArena object to be used.
+   * @param soundPlayer Soundplayer object to be modified
+   * @param musicBox Rectangle boxs' color to be modified
+   */
   public void HandleMusicInput(GameArena mainScreen, SoundPlayer soundPlayer, Rectangle musicBox) {
     if (mainScreen.letterPressed('m')) {
       mainScreen.pause();
@@ -67,6 +97,16 @@ public class KeyboardInputs {
     }
   }
 
+  /**
+   * Handles all Cheat inputs for the game.
+   * @param mainScreen GameArena object to be used.
+   * @param cheatEngine CheatEngine object to be used.
+   * @param leftMallet Left mallet properties to be modified.
+   * @param rightMallet Right mallet properties to be modified.
+   * @param table Table properties to be modified.
+   * @param originalConstantSpeed Speed of mallets to be modified.
+   * @return New speed of mallets after modifications.
+   */
   public double handleCheatInputs(GameArena mainScreen, Cheats cheatEngine, Ball leftMallet, Ball rightMallet, Rectangle table, double originalConstantSpeed) {
     double newConstantSpeed = originalConstantSpeed;
   

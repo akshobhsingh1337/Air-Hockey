@@ -1,3 +1,7 @@
+/**
+ * This class provides the required code to create the Air Hockey Screen.
+ */
+
 public class CreateScreen {
 
   private Ball leftMallet;
@@ -12,7 +16,11 @@ public class CreateScreen {
   private Text leftPlayerScore;
   private Text rightPlayerScore;
 
-  CreateScreen() {
+  /**
+   * Constructor for CreateScreen class, creates all the screen objects required
+   * by the game.
+   */
+  public CreateScreen() {
 
     gameScreen = new GameArena(1500, 800);
 
@@ -62,46 +70,101 @@ public class CreateScreen {
 
   }
 
+  /**
+   * Obtains the Left Mallet object.
+   * 
+   * @return The left mallet - ball object.
+   */
   public Ball getLeftMallet() {
     return leftMallet;
   }
 
+  /**
+   * Obtains the Right Mallet object.
+   * 
+   * @return The right mallet - ball object.
+   */
   public Ball getRightMallet() {
     return rightMallet;
   }
 
+  /**
+   * Obtains the Puck object.
+   * 
+   * @return The puck - ball object.
+   */
   public Ball getPuck() {
     return puck;
   }
 
+  /**
+   * Obtains the Game arena object.
+   * 
+   * @return The game arena object.
+   */
   public GameArena getGamearena() {
     return gameScreen;
   }
 
+  /**
+   * Obtains the Main table object.
+   * 
+   * @return The table - rectangle object.
+   */
   public Rectangle getTable() {
     return whiteScreen;
   }
 
+  /**
+   * Obtains the Left Goal line object.
+   * 
+   * @return The left goal - line object.
+   */
   public Line getLeftGoal() {
     return leftGoal;
   }
 
+  /**
+   * Obtains the Right Goal line object.
+   * 
+   * @return The right goal - line object.
+   */
   public Line getRighGoal() {
     return rightGoal;
   }
 
+  /**
+   * Obtains the Music box object.
+   * 
+   * @return The Music box - rectangle object.
+   */
   public Rectangle getMusicBox() {
     return musicBox;
   }
 
+  /**
+   * Obtains the Text at the top of the table object.
+   * 
+   * @return The Top - text object.
+   */
   public Text getTopText() {
     return topText;
   }
 
+  /**
+   * Obtains the Score of the left player object.
+   * 
+   * @return The left player score - text object.
+   */
   public Text getLeftPlayerText() {
     return leftPlayerScore;
   }
 
+  /**
+   * Obtains the Score of the right player object.
+   * 
+   * @return The right player score - text object.
+   */
   public Text getRightPlayerText() {
     return rightPlayerScore;
   }
