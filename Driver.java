@@ -40,7 +40,7 @@ public class Driver {
     double rightMalletXSpeed = 0;
     double rightMalletYSpeed = 0;
 
-    double constantSpeed = 15;
+    double constantSpeed = 7;
 
     int playerOneScore = 0;
     int playerTwoScore = 0;
