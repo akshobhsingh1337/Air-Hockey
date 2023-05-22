@@ -22,7 +22,7 @@ public class CreateScreen {
    */
   public CreateScreen() {
 
-    gameScreen = new GameArena(1500, 800);
+    gameScreen = new GameArena(1800, 800);
 
     Rectangle blackScreen = new Rectangle(0, 0, 1500, 800, "BLACK", 0);
     Rectangle blueScreen = new Rectangle(250, 150, 1000, 500, "BLUE", 1);
@@ -54,7 +54,7 @@ public class CreateScreen {
     gameScreen.addBall(rightMallet);
     gameScreen.addBall(puck);
 
-    musicBox = new Rectangle(1300, 600, 172, 30, "GREEN", 1);
+    musicBox = new Rectangle(1300, 600, 195, 30, "GREEN", 1);
     Text musicText = new Text("Sound Effects", 25, 1303, 622, "BLACK", 3);
 
     gameScreen.addRectangle(musicBox);
