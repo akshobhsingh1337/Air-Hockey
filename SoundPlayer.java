@@ -6,7 +6,7 @@ import java.io.IOException;
  * This class handles all the sounds to be played.
  */
 public class SoundPlayer {
-  private boolean soundState = true;
+  private boolean soundState = false;
   private boolean drumRollPlayed = true;
 
   /**
