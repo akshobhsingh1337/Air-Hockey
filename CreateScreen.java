@@ -54,7 +54,7 @@ public class CreateScreen {
     gameScreen.addBall(rightMallet);
     gameScreen.addBall(puck);
 
-    musicBox = new Rectangle(1300, 600, 195, 30, "GREEN", 1);
+    musicBox = new Rectangle(1300, 600, 195, 30, "RED", 1);
     Text musicText = new Text("Sound Effects", 25, 1303, 622, "BLACK", 3);
 
     gameScreen.addRectangle(musicBox);
